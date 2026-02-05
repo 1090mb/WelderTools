@@ -19,7 +19,7 @@ No installation required. Just Python 3.x.
 
 ```bash
 # Clone the repository
-git clone https://github.com/1090mb/WelderTools.git
+git clone <repository_url>
 cd WelderTools
 
 # Make executable (optional)
@@ -198,7 +198,7 @@ python welder_tools.py material cast_iron
 
 ### TIG Welding
 - **Polarity**: DCEN for steel, AC for aluminum
-- **Tungsten**: Thoriated/Lanthanated for DC, Pure/Zirconated for AC
+- **Tungsten**: Lanthanated/Ceriated for DC (safer than thoriated), Pure/Zirconated for AC
 - **Gas**: 100% Argon for most applications
 - **Amperage**: Rule of thumb: 1 amp per 0.001" thickness
 

@@ -52,20 +52,20 @@ class WeldingExpert:
         return {
             'mild_steel': {
                 'thickness_range': {
-                    '1/16': {'amperage': '40-60A', 'tungsten': '1/16" 2% Thoriated', 'gas': '100% Ar', 'flow_rate': '15-20 CFH'},
-                    '1/8': {'amperage': '70-90A', 'tungsten': '3/32" 2% Thoriated', 'gas': '100% Ar', 'flow_rate': '15-20 CFH'},
-                    '3/16': {'amperage': '100-130A', 'tungsten': '1/8" 2% Thoriated', 'gas': '100% Ar', 'flow_rate': '15-25 CFH'},
-                    '1/4': {'amperage': '140-180A', 'tungsten': '1/8" 2% Thoriated', 'gas': '100% Ar', 'flow_rate': '20-25 CFH'},
+                    '1/16': {'amperage': '40-60A', 'tungsten': '1/16" 2% Lanthanated or Ceriated', 'gas': '100% Ar', 'flow_rate': '15-20 CFH'},
+                    '1/8': {'amperage': '70-90A', 'tungsten': '3/32" 2% Lanthanated or Ceriated', 'gas': '100% Ar', 'flow_rate': '15-20 CFH'},
+                    '3/16': {'amperage': '100-130A', 'tungsten': '1/8" 2% Lanthanated or Ceriated', 'gas': '100% Ar', 'flow_rate': '15-25 CFH'},
+                    '1/4': {'amperage': '140-180A', 'tungsten': '1/8" 2% Lanthanated or Ceriated', 'gas': '100% Ar', 'flow_rate': '20-25 CFH'},
                 },
                 'polarity': 'DCEN (DC Electrode Negative)',
-                'notes': 'Add filler rod as needed'
+                'notes': 'Add filler rod as needed. Lanthanated/Ceriated tungsten preferred over thoriated.'
             },
             'stainless_steel': {
                 'thickness_range': {
-                    '1/16': {'amperage': '40-60A', 'tungsten': '1/16" 2% Lanthanated', 'gas': '100% Ar', 'flow_rate': '15-20 CFH'},
-                    '1/8': {'amperage': '70-95A', 'tungsten': '3/32" 2% Lanthanated', 'gas': '100% Ar', 'flow_rate': '15-20 CFH'},
-                    '3/16': {'amperage': '105-140A', 'tungsten': '1/8" 2% Lanthanated', 'gas': '100% Ar', 'flow_rate': '15-25 CFH'},
-                    '1/4': {'amperage': '150-190A', 'tungsten': '1/8" 2% Lanthanated', 'gas': '100% Ar', 'flow_rate': '20-25 CFH'},
+                    '1/16': {'amperage': '40-60A', 'tungsten': '1/16" 2% Lanthanated or Ceriated', 'gas': '100% Ar', 'flow_rate': '15-20 CFH'},
+                    '1/8': {'amperage': '70-95A', 'tungsten': '3/32" 2% Lanthanated or Ceriated', 'gas': '100% Ar', 'flow_rate': '15-20 CFH'},
+                    '3/16': {'amperage': '105-140A', 'tungsten': '1/8" 2% Lanthanated or Ceriated', 'gas': '100% Ar', 'flow_rate': '15-25 CFH'},
+                    '1/4': {'amperage': '150-190A', 'tungsten': '1/8" 2% Lanthanated or Ceriated', 'gas': '100% Ar', 'flow_rate': '20-25 CFH'},
                 },
                 'polarity': 'DCEN (DC Electrode Negative)',
                 'notes': 'Backpurge on critical applications'

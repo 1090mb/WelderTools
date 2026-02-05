@@ -57,7 +57,7 @@ def test_tig_settings():
     # Test stainless
     result = expert.get_tig_settings('stainless_steel', '3/16')
     assert '105-140A' in result
-    assert 'Lanthanated' in result
+    assert 'Lanthanated or Ceriated' in result
     print("✓ TIG stainless steel settings correct")
 
 
