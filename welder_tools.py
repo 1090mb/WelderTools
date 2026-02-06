@@ -19,16 +19,22 @@ def get_platform_info():
         return {
             'name': 'Android',
             'mobile': True,
-            'terminal_width': 60,  # Smaller screen width for mobile
+            'terminal_width': 50,  # Mobile screen width
             'note': 'Running on Android (Termux)'
         }
     
-    # Detect iOS (check for common iOS Python environments)
-    if system == 'Darwin' and ('Pythonista' in sys.executable or 'iSH' in os.environ.get('SHELL', '')):
+    # Detect iOS (check for common iOS Python environments: Pythonista, iSH, a-Shell)
+    is_ios = (system == 'Darwin' and 
+              ('Pythonista' in sys.executable or 
+               'iSH' in os.environ.get('SHELL', '') or
+               'a-Shell' in sys.executable or
+               'LC_TERMINAL' in os.environ and os.environ.get('LC_TERMINAL') == 'a-Shell'))
+    
+    if is_ios:
         return {
             'name': 'iOS',
             'mobile': True,
-            'terminal_width': 60,
+            'terminal_width': 50,  # Mobile screen width
             'note': 'Running on iOS'
         }
     
@@ -36,7 +42,7 @@ def get_platform_info():
     return {
         'name': system,
         'mobile': False,
-        'terminal_width': 80,
+        'terminal_width': 60,  # Desktop screen width
         'note': f'Running on {system}'
     }
 

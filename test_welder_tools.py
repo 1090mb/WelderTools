@@ -26,8 +26,8 @@ def test_platform_detection():
     # Verify mobile is boolean
     assert isinstance(platform_info['mobile'], bool)
     
-    # Verify terminal_width is appropriate
-    assert platform_info['terminal_width'] in [60, 80]
+    # Verify terminal_width is appropriate (50 for mobile, 60 for desktop)
+    assert platform_info['terminal_width'] in [50, 60]
     
     print(f"✓ Platform detection works: {platform_info['note']}")
 
