@@ -10,7 +10,46 @@ import os
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from welder_tools import WeldingExpert
+from welder_tools import WeldingExpert, get_platform_info
+
+
+def test_platform_detection():
+    """Test platform detection functionality"""
+    platform_info = get_platform_info()
+    
+    # Verify platform info has required keys
+    assert 'name' in platform_info
+    assert 'mobile' in platform_info
+    assert 'terminal_width' in platform_info
+    assert 'note' in platform_info
+    
+    # Verify mobile is boolean
+    assert isinstance(platform_info['mobile'], bool)
+    
+    # Verify terminal_width is appropriate
+    assert platform_info['terminal_width'] in [60, 80]
+    
+    print(f"✓ Platform detection works: {platform_info['note']}")
+
+
+def test_mobile_formatting():
+    """Test that mobile formatting methods work"""
+    expert = WeldingExpert()
+    
+    # Verify platform info is stored
+    assert hasattr(expert, 'platform_info')
+    assert expert.platform_info is not None
+    
+    # Test formatting methods
+    header = expert._format_header("Test Header")
+    assert "Test Header" in header
+    assert "===" in header
+    
+    section = expert._format_section("Test Section")
+    assert "Test Section" in section
+    assert "===" in section
+    
+    print("✓ Mobile formatting methods work correctly")
 
 
 def test_mig_settings():
@@ -154,6 +193,10 @@ def run_all_tests():
     print()
     
     try:
+        test_platform_detection()
+        print()
+        test_mobile_formatting()
+        print()
         test_mig_settings()
         print()
         test_tig_settings()

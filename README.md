@@ -4,6 +4,18 @@
 
 The best welder assistant in the world. Knows everything about welding: MIG, TIG, Arc. All the machines, tools, brands, parts, and components. All the settings, temperatures, and wire speeds. Provides straightforward, no-nonsense output.
 
+**✨ Now with full Android and iOS support!** Use WelderTools on your phone or tablet in the shop. See [MOBILE_SETUP.md](MOBILE_SETUP.md) for details.
+
+## Platforms Supported
+
+- ✅ **Linux** - Full support
+- ✅ **macOS** - Full support  
+- ✅ **Windows** - Full support
+- ✅ **Android** - Full support via Termux
+- ✅ **iOS** - Full support via Pythonista, iSH, or a-Shell
+
+**Cross-Platform**: Pure Python with no external dependencies - works everywhere Python 3.6+ runs!
+
 ## Features
 
 - **MIG Welding Settings**: Voltage, wire speed, gas mix, wire size for mild steel, stainless, and aluminum
@@ -15,6 +27,8 @@ The best welder assistant in the world. Knows everything about welding: MIG, TIG
 
 ## Installation
 
+### Desktop (Linux, macOS, Windows)
+
 No installation required. Just Python 3.x.
 
 ```bash
@@ -22,8 +36,23 @@ No installation required. Just Python 3.x.
 git clone <repository_url>
 cd WelderTools
 
-# Make executable (optional)
+# Make executable (optional, Unix-like systems)
 chmod +x welder_tools.py
+```
+
+### Mobile Platforms
+
+For detailed mobile setup instructions:
+- **Android (Termux)**: See [MOBILE_SETUP.md](MOBILE_SETUP.md#android-setup-termux)
+- **iOS (Pythonista/iSH)**: See [MOBILE_SETUP.md](MOBILE_SETUP.md#ios-setup)
+
+Quick mobile setup:
+```bash
+# Android (Termux) or iOS (iSH/a-Shell)
+pkg install python git  # or: apk add python3 git
+git clone <repository_url>
+cd WelderTools
+python welder_tools.py mig mild_steel 1/8
 ```
 
 ## Usage
@@ -248,3 +277,15 @@ Contributions welcome! This tool is designed to help welders with accurate, prof
 ## Disclaimer
 
 Always follow manufacturer's recommendations and safety guidelines. This tool provides general guidance based on industry standards. Actual settings may vary based on specific conditions, equipment, and application requirements.
+
+---
+
+## Mobile Users
+
+📱 **Using on Android or iOS?** Check out [MOBILE_SETUP.md](MOBILE_SETUP.md) for platform-specific setup guides, tips, and troubleshooting.
+
+**Mobile Features:**
+- ✅ Offline operation - no internet required
+- ✅ Optimized output for smaller screens
+- ✅ All features work identically to desktop
+- ✅ Quick access in the shop on your phone or tablet
