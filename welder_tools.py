@@ -508,8 +508,8 @@ class WeldingExpert:
         total_hours = sum(entry['hours'] for entry in log_data)
         total_parts = sum(entry['parts'] for entry in log_data)
         total_sessions = len(log_data)
-        avg_hours = total_hours / total_sessions if total_sessions > 0 else 0
-        avg_parts = total_parts / total_sessions if total_sessions > 0 else 0
+        avg_hours = total_hours / total_sessions
+        avg_parts = total_parts / total_sessions
         
         output = self._format_section("WELDING STATISTICS")
         output += f"Total Sessions: {total_sessions}\n"

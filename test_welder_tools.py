@@ -191,11 +191,11 @@ def test_tracking():
     import os
     
     # Use temporary file for testing
-    temp_file = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json')
-    temp_file.close()
+    fd, temp_path = tempfile.mkstemp(suffix='.json')
+    os.close(fd)  # Close the file descriptor immediately
     
     try:
-        expert = WeldingExpert(log_file=temp_file.name)
+        expert = WeldingExpert(log_file=temp_path)
         
         # Test logging sessions
         result = expert.log_session(3.5, 10, 'Test session 1')
@@ -242,8 +242,8 @@ def test_tracking():
         
     finally:
         # Clean up temp file
-        if os.path.exists(temp_file.name):
-            os.remove(temp_file.name)
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
 
 
 def run_all_tests():
