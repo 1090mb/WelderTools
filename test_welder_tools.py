@@ -185,6 +185,67 @@ def test_material_info():
     print("✓ Stainless steel material info correct")
 
 
+def test_tracking():
+    """Test tracking functionality"""
+    import tempfile
+    import os
+    
+    # Use temporary file for testing
+    temp_file = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json')
+    temp_file.close()
+    
+    try:
+        expert = WeldingExpert(log_file=temp_file.name)
+        
+        # Test logging sessions
+        result = expert.log_session(3.5, 10, 'Test session 1')
+        assert '3.5' in result
+        assert '10' in result
+        assert 'Test session 1' in result
+        print("✓ Log session with description works")
+        
+        result = expert.log_session(2.0, 5)
+        assert '2.0' in result
+        assert '5' in result
+        print("✓ Log session without description works")
+        
+        # Test view log
+        result = expert.view_log()
+        assert '3.5' in result
+        assert '2.0' in result
+        assert '10' in result
+        assert '5' in result
+        print("✓ View log works")
+        
+        # Test view with limit
+        result = expert.view_log(limit=1)
+        assert '2.0' in result
+        assert 'Last 1' in result
+        print("✓ View log with limit works")
+        
+        # Test statistics
+        result = expert.get_stats()
+        assert 'Total Sessions: 2' in result
+        assert '5.50' in result  # Total hours
+        assert 'Total Parts Made: 15' in result
+        print("✓ Statistics calculation works")
+        
+        # Test clear log
+        result = expert.clear_log()
+        assert 'CLEARED' in result
+        print("✓ Clear log works")
+        
+        # Verify log is empty after clear
+        result = expert.view_log()
+        assert 'No log entries' in result
+        print("✓ Log is empty after clear")
+        
+    finally:
+        # Clean up temp file
+        if os.path.exists(temp_file.name):
+            os.remove(temp_file.name)
+
+
 def run_all_tests():
     """Run all tests"""
     print("=" * 60)
@@ -208,6 +269,8 @@ def run_all_tests():
         test_machine_info()
         print()
         test_material_info()
+        print()
+        test_tracking()
         print()
         print("=" * 60)
         print("✓ ALL TESTS PASSED")

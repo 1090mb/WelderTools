@@ -8,6 +8,8 @@ Cross-platform support: Desktop, Android (Termux), iOS (Pythonista/iSH)
 import sys
 import platform
 import os
+import json
+from datetime import datetime
 
 
 def get_platform_info():
@@ -50,7 +52,7 @@ def get_platform_info():
 class WeldingExpert:
     """Expert system for all welding processes and equipment"""
     
-    def __init__(self):
+    def __init__(self, log_file='welding_log.json'):
         self.mig_settings = self._init_mig_settings()
         self.tig_settings = self._init_tig_settings()
         self.arc_settings = self._init_arc_settings()
@@ -58,6 +60,7 @@ class WeldingExpert:
         self.machine_brands = self._init_machine_brands()
         self.materials = self._init_materials()
         self.platform_info = get_platform_info()
+        self.log_file = log_file
     
     def _format_header(self, text):
         """Format header based on platform (mobile-friendly for smaller screens)"""
@@ -427,6 +430,102 @@ class WeldingExpert:
         output += f"Wire Speed: {speed}\n"
         
         return output
+    
+    def _load_log(self):
+        """Load tracking log from JSON file"""
+        if not os.path.exists(self.log_file):
+            return []
+        try:
+            with open(self.log_file, 'r') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError):
+            return []
+    
+    def _save_log(self, log_data):
+        """Save tracking log to JSON file"""
+        try:
+            with open(self.log_file, 'w') as f:
+                json.dump(log_data, f, indent=2)
+            return True
+        except IOError:
+            return False
+    
+    def log_session(self, hours, parts, description=''):
+        """Log a welding session with hours worked and parts made"""
+        log_data = self._load_log()
+        
+        entry = {
+            'date': datetime.now().strftime('%Y-%m-%d'),
+            'time': datetime.now().strftime('%H:%M:%S'),
+            'hours': float(hours),
+            'parts': int(parts),
+            'description': description
+        }
+        
+        log_data.append(entry)
+        
+        if self._save_log(log_data):
+            output = self._format_section("SESSION LOGGED")
+            output += f"Date: {entry['date']}\n"
+            output += f"Time: {entry['time']}\n"
+            output += f"Hours: {entry['hours']}\n"
+            output += f"Parts Made: {entry['parts']}\n"
+            if description:
+                output += f"Description: {description}\n"
+            return output
+        else:
+            return "Error: Could not save log data"
+    
+    def view_log(self, limit=10):
+        """View recent log entries"""
+        log_data = self._load_log()
+        
+        if not log_data:
+            return "No log entries found"
+        
+        # Show most recent entries first
+        recent_entries = log_data[-limit:]
+        recent_entries.reverse()
+        
+        output = self._format_section(f"RECENT LOG ENTRIES (Last {min(limit, len(log_data))})")
+        
+        for entry in recent_entries:
+            output += f"\nDate: {entry['date']} {entry['time']}\n"
+            output += f"  Hours: {entry['hours']}\n"
+            output += f"  Parts: {entry['parts']}\n"
+            if entry.get('description'):
+                output += f"  Description: {entry['description']}\n"
+        
+        return output
+    
+    def get_stats(self):
+        """Get statistics on logged hours and parts"""
+        log_data = self._load_log()
+        
+        if not log_data:
+            return "No log entries found"
+        
+        total_hours = sum(entry['hours'] for entry in log_data)
+        total_parts = sum(entry['parts'] for entry in log_data)
+        total_sessions = len(log_data)
+        avg_hours = total_hours / total_sessions if total_sessions > 0 else 0
+        avg_parts = total_parts / total_sessions if total_sessions > 0 else 0
+        
+        output = self._format_section("WELDING STATISTICS")
+        output += f"Total Sessions: {total_sessions}\n"
+        output += f"Total Hours: {total_hours:.2f}\n"
+        output += f"Total Parts Made: {total_parts}\n"
+        output += f"Average Hours/Session: {avg_hours:.2f}\n"
+        output += f"Average Parts/Session: {avg_parts:.1f}\n"
+        
+        return output
+    
+    def clear_log(self):
+        """Clear all log entries"""
+        if self._save_log([]):
+            return self._format_section("LOG CLEARED") + "All log entries have been removed\n"
+        else:
+            return "Error: Could not clear log data"
 
 
 def main():
@@ -455,6 +554,11 @@ def main():
         print("  python welder_tools.py wire <material> <wire_size> <thickness_category>")
         print("  python welder_tools.py machine [brand]")
         print("  python welder_tools.py material <material>")
+        print("\nTracking:")
+        print("  python welder_tools.py log <hours> <parts> [description]")
+        print("  python welder_tools.py view [limit]")
+        print("  python welder_tools.py stats")
+        print("  python welder_tools.py clear")
         print("\nExamples:")
         print("  python welder_tools.py mig mild_steel 1/8")
         print("  python welder_tools.py tig aluminum 1/4")
@@ -462,6 +566,9 @@ def main():
         print("  python welder_tools.py wire mild_steel 0.035 medium")
         print("  python welder_tools.py machine Miller")
         print("  python welder_tools.py material aluminum")
+        print("  python welder_tools.py log 4.5 12 'Welded steel brackets'")
+        print("  python welder_tools.py view 20")
+        print("  python welder_tools.py stats")
         return
     
     command = sys.argv[1].lower()
@@ -494,6 +601,22 @@ def main():
     elif command == 'material' and len(sys.argv) >= 3:
         material = sys.argv[2]
         print(expert.get_material_info(material))
+    
+    elif command == 'log' and len(sys.argv) >= 4:
+        hours = sys.argv[2]
+        parts = sys.argv[3]
+        description = ' '.join(sys.argv[4:]) if len(sys.argv) > 4 else ''
+        print(expert.log_session(hours, parts, description))
+    
+    elif command == 'view':
+        limit = int(sys.argv[2]) if len(sys.argv) >= 3 else 10
+        print(expert.view_log(limit))
+    
+    elif command == 'stats':
+        print(expert.get_stats())
+    
+    elif command == 'clear':
+        print(expert.clear_log())
     
     else:
         print(f"\nInvalid command or missing arguments.")

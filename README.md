@@ -24,6 +24,7 @@ The best welder assistant in the world. Knows everything about welding: MIG, TIG
 - **Wire Speed Calculator**: Detailed wire speed recommendations by material and wire size
 - **Machine Knowledge**: Information on major brands (Miller, Lincoln, ESAB, Hobart, Everlast, Fronius)
 - **Material Properties**: Composition, weldability, and special considerations for different metals
+- **Hours & Parts Tracking**: Log welding sessions, track hours worked and parts made, view statistics
 
 ## Installation
 
@@ -201,6 +202,48 @@ python welder_tools.py material cast_iron
 - Special concerns
 - Preparation steps
 - Common uses
+
+### Hours & Parts Tracking
+
+Track your welding work with built-in session logging:
+
+```bash
+# Log a welding session
+python welder_tools.py log <hours> <parts> [description]
+
+# View recent log entries
+python welder_tools.py view [limit]
+
+# View statistics
+python welder_tools.py stats
+
+# Clear all log entries
+python welder_tools.py clear
+```
+
+**Examples:**
+```bash
+# Log 4.5 hours with 12 parts made and a description
+python welder_tools.py log 4.5 12 "Welded steel brackets for truck bed"
+
+# Log session without description
+python welder_tools.py log 2.5 7
+
+# View last 20 entries
+python welder_tools.py view 20
+
+# View all statistics
+python welder_tools.py stats
+```
+
+**Tracking data includes:**
+- Date and time of each session
+- Hours worked
+- Number of parts made
+- Optional description
+- Cumulative statistics (total hours, total parts, averages)
+
+All tracking data is stored locally in `welding_log.json` and persists between sessions.
 
 ## Supported Materials
 
