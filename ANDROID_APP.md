@@ -2,6 +2,8 @@
 
 WelderTools is now available as a full Android app with a graphical user interface (GUI)!
 
+**📱 New to the app? See [ANDROID_QUICKSTART.md](ANDROID_QUICKSTART.md) for a user-friendly guide!**
+
 ## Features
 
 The Android app includes all the functionality of the command-line version:
