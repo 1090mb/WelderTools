@@ -211,12 +211,12 @@ def run_all_tests():
     print(f"\nTotal: {passed}/{total} tests passed")
     
     if passed == total:
-        print("\n🎉 All tests passed! The Android app is ready to build.")
+        print("\nAll tests passed! The Android app is ready to build.")
         print("\nTo build the Android app, run:")
         print("  buildozer android debug")
         return 0
     else:
-        print(f"\n❌ {total - passed} test(s) failed. Please fix the issues.")
+        print(f"\nFAILED: {total - passed} test(s) failed. Please fix the issues.")
         return 1
 
 

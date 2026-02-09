@@ -529,8 +529,28 @@ class TrackingScreen(Screen):
     def log_entry(self, instance):
         """Log a new tracking entry"""
         try:
-            hours = float(self.hours_input.text)
-            parts = int(self.parts_input.text)
+            # Validate hours first
+            if not self.hours_input.text:
+                self.result_label.text = 'Error: Please enter hours worked'
+                return
+            
+            try:
+                hours = float(self.hours_input.text)
+            except ValueError:
+                self.result_label.text = 'Error: Hours must be a valid number (e.g., 4.5)'
+                return
+            
+            # Validate parts
+            if not self.parts_input.text:
+                self.result_label.text = 'Error: Please enter parts made'
+                return
+            
+            try:
+                parts = int(self.parts_input.text)
+            except ValueError:
+                self.result_label.text = 'Error: Parts must be a valid number (e.g., 12)'
+                return
+            
             description = self.desc_input.text or ''
             
             result = self.expert.log_hours(hours, parts, description)
@@ -543,8 +563,8 @@ class TrackingScreen(Screen):
             
             # Refresh stats
             self.view_stats(None)
-        except ValueError:
-            self.result_label.text = 'Error: Please enter valid numbers for hours and parts'
+        except Exception as e:
+            self.result_label.text = f'Error: {str(e)}'
     
     def view_stats(self, instance):
         """View tracking statistics"""
