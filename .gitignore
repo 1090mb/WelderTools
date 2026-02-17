@@ -40,3 +40,6 @@ Thumbs.db
 /tmp/
 *.tmp
 *.log
+
+# MCP State
+mcp-state.json
