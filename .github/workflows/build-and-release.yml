@@ -25,31 +25,16 @@ jobs:
           sudo apt-get install -y openjdk-8-jdk
           buildozer android debug
 
-      - name: Get version
-        id: version
-        run: echo "VERSION=$(grep -E '^version = ' buildozer.spec | sed -E 's/version = //')" >> $GITHUB_ENV
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ env.VERSION }}.${{ github.run_number }}
-          release_name: Release v${{ env.VERSION }}.${{ github.run_number }}
-          draft: false
-          prerelease: false
-
       - name: Get APK file path
         id: get_apk_path
-        run: echo "APK_PATH=$(find bin -name '*.apk' | head -n 1)" >> $GITHUB_ENV
+        run: echo "::set-output name=apk_path::$(find bin -name '*.apk' | head -n 1)"
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.APK_PATH }}
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ steps.get_apk_path.outputs.apk_path }}
           asset_name: weldertools.apk
           asset_content_type: application/vnd.android.package-archive
