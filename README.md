@@ -4,17 +4,19 @@
 
 The best welder assistant in the world. Knows everything about welding: MIG, TIG, Arc. All the machines, tools, brands, parts, and components. All the settings, temperatures, and wire speeds. Provides straightforward, no-nonsense output.
 
-**✨ Now with full Android and iOS support!** Use WelderTools on your phone or tablet in the shop. See [MOBILE_SETUP.md](MOBILE_SETUP.md) for details.
+**✨ Now available as a native Android app!** Full GUI interface for your phone or tablet. See [ANDROID_APP.md](ANDROID_APP.md) for build instructions.
+
+**✨ Also supports mobile CLI!** Use WelderTools via command-line on Android (Termux) and iOS. See [MOBILE_SETUP.md](MOBILE_SETUP.md) for details.
 
 ## Platforms Supported
 
-- ✅ **Linux** - Full support
-- ✅ **macOS** - Full support  
-- ✅ **Windows** - Full support
-- ✅ **Android** - Full support via Termux
-- ✅ **iOS** - Full support via Pythonista, iSH, or a-Shell
+- ✅ **Linux** - Full support (CLI)
+- ✅ **macOS** - Full support (CLI)
+- ✅ **Windows** - Full support (CLI)
+- ✅ **Android** - Native GUI app + CLI via Termux
+- ✅ **iOS** - CLI via Pythonista, iSH, or a-Shell
 
-**Cross-Platform**: Pure Python with no external dependencies - works everywhere Python 3.6+ runs!
+**Cross-Platform**: Pure Python with no external dependencies for CLI. Android GUI app uses Kivy framework.
 
 ## Features
 
@@ -27,6 +29,25 @@ The best welder assistant in the world. Knows everything about welding: MIG, TIG
 - **Hours & Parts Tracking**: Log welding sessions, track hours worked and parts made, view statistics
 
 ## Installation
+
+### Android App (GUI)
+
+**Native Android app with touch-friendly interface!**
+
+See [ANDROID_APP.md](ANDROID_APP.md) for detailed build instructions.
+
+Quick summary:
+```bash
+# Install buildozer
+pip3 install buildozer
+
+# Clone and build
+git clone <repository_url>
+cd WelderTools
+buildozer android debug
+
+# Install APK from bin/ directory
+```
 
 ### Desktop (Linux, macOS, Windows)
 
@@ -41,9 +62,9 @@ cd WelderTools
 chmod +x welder_tools.py
 ```
 
-### Mobile Platforms
+### Mobile CLI (Termux/iOS)
 
-For detailed mobile setup instructions:
+For detailed mobile CLI setup instructions:
 - **Android (Termux)**: See [MOBILE_SETUP.md](MOBILE_SETUP.md#android-setup-termux)
 - **iOS (Pythonista/iSH)**: See [MOBILE_SETUP.md](MOBILE_SETUP.md#ios-setup)
 
