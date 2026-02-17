@@ -1,5 +1,8 @@
 # WelderTools
 
+![WelderTools Tests](https://github.com/1090mb/WelderTools/actions/workflows/python-app.yml/badge.svg)
+![Build and Release APK](https://github.com/1090mb/WelderTools/actions/workflows/build-and-release.yml/badge.svg)
+
 **Professional Welding Assistant** - Expert guidance on MIG, TIG, and Arc welding with comprehensive knowledge base.
 
 The best welder assistant in the world. Knows everything about welding: MIG, TIG, Arc. All the machines, tools, brands, parts, and components. All the settings, temperatures, and wire speeds. Provides straightforward, no-nonsense output.
@@ -32,7 +35,7 @@ The best welder assistant in the world. Knows everything about welding: MIG, TIG
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/WelderTools.git
+    git clone https://github.com/1090mb/WelderTools.git
     cd WelderTools
     ```
 

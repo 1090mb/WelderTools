@@ -6,7 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-release:
+  build-android:
+    name: Build Android APK
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -21,6 +22,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
+            autoconf \
+            automake \
+            cmake \
+            libtool \
+            pkg-config \
+            libffi-dev \
+            libssl-dev \
             libsdl2-dev \
             libsdl2-image-dev \
             libsdl2-mixer-dev \
@@ -37,29 +45,54 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
-          pip install buildozer cython p4a
+          pip install buildozer cython python-for-android
 
       - name: Build APK
         run: |
           sudo apt-get install -y openjdk-11-jdk
           export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-          buildozer android release
+          buildozer android debug
 
-      - name: Get APK file path
-        id: get_apk_path
-        run: |
-          echo "apk_path=$(find bin -name '*.apk' | head -n 1)" >> $GITHUB_OUTPUT
-      - name: Get APK file name
-        id: get_apk_name
-        run: |
-          echo "apk_name=$(basename $(find bin -name '*.apk' | head -n 1))" >> $GITHUB_OUTPUT
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+      - name: Upload APK to Release
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ steps.get_apk_path.outputs.apk_path }}
-          asset_name: ${{ steps.get_apk_name.outputs.apk_name }}
-          asset_content_type: application/vnd.android.package-archive
+          files: bin/*.apk
+
+  build-ios:
+    name: Build iOS Project
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install kivy-ios
+          brew install autoconf automake libtool pkg-config
+
+      - name: Build Kivy for iOS
+        run: |
+          toolchain build python3 kivy
+
+      - name: Create Xcode Project
+        run: |
+          toolchain create WelderTools .
+
+      - name: Zip Xcode Project
+        run: |
+          zip -r weldertools-ios-project.zip *-ios
+
+      - name: Upload iOS Project to Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: weldertools-ios-project.zip
