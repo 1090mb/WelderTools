@@ -20,6 +20,7 @@ The best welder assistant in the world. Knows everything about welding: MIG, TIG
 - **Wire Speed Calculator**: Detailed wire speed recommendations by material and wire size
 - **Machine Knowledge**: Information on major brands (Miller, Lincoln, ESAB, Hobart, Everlast, Fronius)
 - **Material Properties**: Composition, weldability, and special considerations for different metals
+- **Session Tracking**: Log welding hours and parts. Export logs to CSV.
 
 ## Running the Application
 
@@ -37,7 +38,7 @@ The best welder assistant in the world. Knows everything about welding: MIG, TIG
 
 2.  **Install dependencies:**
     ```bash
-    pip install -r requirements.txt
+    pip install kivy
     ```
 
 ### Running the App
@@ -57,9 +58,24 @@ This project is set up to be built into an Android APK using [Buildozer](https:/
 
 2.  **Build the APK:**
     ```bash
-    buildozer android release
+    buildozer android debug
     ```
     The APK will be created in the `bin/` directory.
+
+### iOS (Manual)
+
+1.  Download the `weldertools-ios-project.zip` from the GitHub Release.
+2.  Unzip and open `weldertools.xcodeproj` in Xcode on a Mac.
+3.  Follow the iOS Manual Signing Guide to sign and install the app.
+
+## Testing
+
+Run the included test suite to verify functionality:
+
+```bash
+python test_welder_tools.py
+python test_android_app.py
+```
 
 ## Releasing the App
 
@@ -135,7 +151,6 @@ The application provides a user-friendly interface to access all the features of
 - **Stick electrode**: Arc too long, reduce amperage
 - **Undercut**: Too much amperage, too fast travel
 - **Overlap**: Too slow travel, too low amperage
--
 - **Slag inclusion**: Clean between passes, proper technique
 
 ## License

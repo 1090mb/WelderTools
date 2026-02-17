@@ -245,6 +245,47 @@ def test_tracking():
         if os.path.exists(temp_path):
             os.remove(temp_path)
 
+def test_csv_export():
+    """Test CSV export functionality"""
+    import tempfile
+    import csv
+    
+    # Use temporary files
+    fd_log, log_path = tempfile.mkstemp(suffix='.json')
+    os.close(fd_log)
+    
+    fd_csv, csv_path = tempfile.mkstemp(suffix='.csv')
+    os.close(fd_csv)
+    
+    try:
+        expert = WeldingExpert(log_file=log_path)
+        
+        # Log some data
+        expert.log_session(1.5, 10, "Notes 1")
+        expert.log_session(2.5, 20, "Notes 2")
+        
+        # Export to CSV
+        result = expert.export_log_to_csv(csv_path)
+        assert f"Log exported to {csv_path}" in result
+        
+        # Verify CSV content
+        with open(csv_path, 'r', newline='') as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+            
+            assert len(rows) == 2
+            assert rows[0]['hours'] == '1.5'
+            assert rows[0]['parts'] == '10'
+            assert rows[0]['notes'] == 'Notes 1'
+            assert rows[1]['hours'] == '2.5'
+            
+        print("✓ CSV export works correctly")
+        
+    finally:
+        if os.path.exists(log_path):
+            os.remove(log_path)
+        if os.path.exists(csv_path):
+            os.remove(csv_path)
 
 def run_all_tests():
     """Run all tests"""
@@ -271,6 +312,8 @@ def run_all_tests():
         test_material_info()
         print()
         test_tracking()
+        print()
+        test_csv_export()
         print()
         print("=" * 60)
         print("✓ ALL TESTS PASSED")

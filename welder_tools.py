@@ -9,6 +9,7 @@ import sys
 import platform
 import os
 import json
+import csv
 from datetime import datetime
 
 
@@ -430,3 +431,135 @@ class WeldingExpert:
         output += f"Wire Speed: {speed}\n"
         
         return output
+
+    def log_session(self, hours, parts, notes=""):
+        """Log a welding session"""
+        entry = {
+            'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'hours': float(hours),
+            'parts': int(parts),
+            'notes': notes
+        }
+        
+        try:
+            data = []
+            if os.path.exists(self.log_file):
+                with open(self.log_file, 'r') as f:
+                    try:
+                        data = json.load(f)
+                    except json.JSONDecodeError:
+                        data = []
+            
+            data.append(entry)
+            
+            with open(self.log_file, 'w') as f:
+                json.dump(data, f, indent=4)
+                
+            msg = f"Session logged: {hours} hours, {parts} parts"
+            if notes:
+                msg += f" - {notes}"
+            return msg
+        except Exception as e:
+            return f"Error logging session: {e}"
+
+    def view_log(self, limit=5):
+        """View recent log entries"""
+        if not os.path.exists(self.log_file):
+            return "No log entries found."
+            
+        try:
+            with open(self.log_file, 'r') as f:
+                try:
+                    data = json.load(f)
+                except json.JSONDecodeError:
+                    return "Log file is empty or corrupted."
+            
+            if not data:
+                return "No log entries found."
+                
+            output = self._format_section(f"WELDING LOG (Last {limit})")
+            
+            # Sort by date descending
+            data.sort(key=lambda x: x.get('date', ''), reverse=True)
+            
+            for entry in data[:limit]:
+                output += f"Date: {entry.get('date', 'N/A')}\n"
+                output += f"Duration: {entry.get('hours', 0)} hours\n"
+                output += f"Parts: {entry.get('parts', 0)}\n"
+                if entry.get('notes'):
+                    output += f"Notes: {entry.get('notes')}\n"
+                output += "-" * 30 + "\n"
+                
+            return output
+        except Exception as e:
+            return f"Error reading log: {e}"
+
+    def get_stats(self):
+        """Get statistics from log"""
+        if not os.path.exists(self.log_file):
+            return "No log entries found."
+            
+        try:
+            with open(self.log_file, 'r') as f:
+                try:
+                    data = json.load(f)
+                except json.JSONDecodeError:
+                    return "Log file is empty or corrupted."
+            
+            if not data:
+                return "No log entries found."
+                
+            total_sessions = len(data)
+            total_hours = sum(entry.get('hours', 0) for entry in data)
+            total_parts = sum(entry.get('parts', 0) for entry in data)
+            
+            output = self._format_section("WELDING STATISTICS")
+            output += f"Total Sessions: {total_sessions}\n"
+            output += f"Total Hours: {total_hours:.2f}\n"
+            output += f"Total Parts Made: {total_parts}\n"
+            if total_sessions > 0:
+                output += f"Avg Hours/Session: {total_hours/total_sessions:.2f}\n"
+            
+            return output
+        except Exception as e:
+            return f"Error calculating stats: {e}"
+
+    def clear_log(self):
+        """Clear the log file"""
+        try:
+            with open(self.log_file, 'w') as f:
+                json.dump([], f)
+            return "CLEARED"
+        except Exception as e:
+            return f"Error clearing log: {e}"
+
+    def export_log_to_csv(self, filename='welding_log_export.csv'):
+        """Export the welding log to a CSV file"""
+        if not os.path.exists(self.log_file):
+            return "No log entries found to export."
+            
+        try:
+            with open(self.log_file, 'r') as f:
+                try:
+                    data = json.load(f)
+                except json.JSONDecodeError:
+                    return "Log file is empty or corrupted."
+            
+            if not data:
+                return "No log entries found to export."
+                
+            # Standard fields for the CSV
+            fieldnames = ['date', 'hours', 'parts', 'notes']
+            
+            with open(filename, 'w', newline='') as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                
+                for entry in data:
+                    # Ensure we only write known fields and handle missing ones
+                    row = {field: entry.get(field, '') for field in fieldnames}
+                    writer.writerow(row)
+                    
+            return f"Log exported to {filename}"
+        except Exception as e:
+            return f"Error exporting log: {e}"

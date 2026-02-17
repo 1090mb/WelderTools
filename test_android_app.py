@@ -76,6 +76,13 @@ def test_main_py_structure():
             print("✗ WeldingExpert import missing")
             return False
         
+        # Check for export_log method
+        if 'def export_log(self):' in content:
+            print("✓ export_log method found")
+        else:
+            print("✗ export_log method missing")
+            return False
+
         return True
     except Exception as e:
         print(f"✗ Failed to parse main.py: {e}")
