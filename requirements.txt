@@ -1,2 +1,1 @@
-# No external dependencies required - uses Python standard library only
-# Python 3.6+ required
+kivy

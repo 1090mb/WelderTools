@@ -28,193 +28,54 @@ The best welder assistant in the world. Knows everything about welding: MIG, TIG
 - **Material Properties**: Composition, weldability, and special considerations for different metals
 - **Hours & Parts Tracking**: Log welding sessions, track hours worked and parts made, view statistics
 
-## Installation
+## Running the Application
 
-### Android App (GUI)
+### Prerequisites
+- Python 3.6+
+- Kivy
 
-**Native Android app with touch-friendly interface!**
+### Installation
 
-See [ANDROID_APP.md](ANDROID_APP.md) for detailed build instructions.
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/WelderTools.git
+    cd WelderTools
+    ```
 
-Quick summary:
-```bash
-# Install buildozer
-pip3 install buildozer
+2.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-# Clone and build
-git clone <repository_url>
-cd WelderTools
-buildozer android debug
-
-# Install APK from bin/ directory
-```
-
-### Desktop (Linux, macOS, Windows)
-
-No installation required. Just Python 3.x.
+### Running the App
 
 ```bash
-# Clone the repository
-git clone <repository_url>
-cd WelderTools
-
-# Make executable (optional, Unix-like systems)
-chmod +x welder_tools.py
+python main.py
 ```
 
-### Mobile CLI (Termux/iOS)
+## Building the APK
 
-For detailed mobile CLI setup instructions:
-- **Android (Termux)**: See [MOBILE_SETUP.md](MOBILE_SETUP.md#android-setup-termux)
-- **iOS (Pythonista/iSH)**: See [MOBILE_SETUP.md](MOBILE_SETUP.md#ios-setup)
+This project is set up to be built into an Android APK using [Buildozer](https://buildozer.readthedocs.io/en/latest/).
 
-Quick mobile setup:
-```bash
-# Android (Termux) or iOS (iSH/a-Shell)
-pkg install python git  # or: apk add python3 git
-git clone <repository_url>
-cd WelderTools
-python welder_tools.py mig mild_steel 1/8
-```
+1.  **Install Buildozer:**
+    ```bash
+    pip install buildozer
+    ```
+
+2.  **Build the APK:**
+    ```bash
+    buildozer android debug
+    ```
+    The APK will be created in the `bin/` directory.
 
 ## Usage
 
-### MIG Welding Settings
+The application provides a user-friendly interface to access all the features of WelderTools.
+- Select the welding process (MIG, TIG, Arc).
+- Choose the material and thickness.
+- Get instant settings and recommendations.
+- Browse information about welding machines and materials.
 
-```bash
-python welder_tools.py mig <material> <thickness>
-```
-
-**Examples:**
-```bash
-# Mild steel, 1/8" thick
-python welder_tools.py mig mild_steel 1/8
-
-# Stainless steel, 3/16" thick
-python welder_tools.py mig stainless_steel 3/16
-
-# Aluminum, 1/4" thick
-python welder_tools.py mig aluminum 1/4
-```
-
-**Output includes:**
-- Voltage range
-- Wire speed (IPM)
-- Gas mixture
-- Wire size
-- Travel speed
-- Stick out distance
-
-### TIG Welding Settings
-
-```bash
-python welder_tools.py tig <material> <thickness>
-```
-
-**Examples:**
-```bash
-# Mild steel, 1/8" thick
-python welder_tools.py tig mild_steel 1/8
-
-# Aluminum, 1/4" thick (AC TIG)
-python welder_tools.py tig aluminum 1/4
-
-# Stainless steel, 3/16" thick
-python welder_tools.py tig stainless_steel 3/16
-```
-
-**Output includes:**
-- Amperage range
-- Tungsten type and size
-- Polarity (AC/DCEN)
-- Gas flow rate
-- Frequency and balance (for aluminum)
-- Special notes
-
-### Arc/Stick Welding Settings
-
-```bash
-python welder_tools.py arc <material> <thickness>
-```
-
-**Examples:**
-```bash
-# Mild steel, 1/4" thick
-python welder_tools.py arc mild_steel 1/4
-
-# Stainless steel, 3/16" thick
-python welder_tools.py arc stainless_steel 3/16
-
-# Cast iron repair
-python welder_tools.py arc cast_iron
-```
-
-**Output includes:**
-- Electrode type and size
-- Amperage range
-- Polarity (AC/DC)
-- Travel angle
-- Arc length
-- Special techniques
-
-### Wire Speed Recommendations
-
-```bash
-python welder_tools.py wire <material> <wire_size> <thickness_category>
-```
-
-**Examples:**
-```bash
-# Mild steel, 0.035" wire, medium thickness
-python welder_tools.py wire mild_steel 0.035 medium
-
-# Aluminum, 3/64" wire, thick material
-python welder_tools.py wire aluminum 3/64 thick
-
-# Stainless steel, 0.030" wire, thin material
-python welder_tools.py wire stainless_steel 0.030 thin
-```
-
-**Thickness categories:** `thin`, `medium`, `thick`, `very_thick`
-
-### Machine Information
-
-```bash
-python welder_tools.py machine [brand]
-```
-
-**Examples:**
-```bash
-# List all brands
-python welder_tools.py machine
-
-# Get info on specific brand
-python welder_tools.py machine Miller
-python welder_tools.py machine Lincoln
-python welder_tools.py machine ESAB
-```
-
-**Brands covered:**
-- Miller (Dynasty, Syncrowave, Millermatic)
-- Lincoln (PowerMIG, Square Wave, Tombstone)
-- ESAB (Rebel, Caddy)
-- Hobart (Handler, IronMan)
-- Everlast (PowerTIG, PowerMTS)
-- Fronius (TransPocket, MagicWave)
-
-### Material Properties
-
-```bash
-python welder_tools.py material <material>
-```
-
-**Examples:**
-```bash
-python welder_tools.py material mild_steel
-python welder_tools.py material aluminum
-python welder_tools.py material stainless_steel
-python welder_tools.py material cast_iron
-```
 
 **Output includes:**
 - Composition

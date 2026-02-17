@@ -41,12 +41,11 @@ Thumbs.db
 *.tmp
 *.log
 
-# Welding log data
-welding_log.json
+# MCP State
+.scratch/
 
-# Buildozer/Android build artifacts
+# Buildozer
 .buildozer/
 bin/
 *.apk
 *.aab
-*.keystore
