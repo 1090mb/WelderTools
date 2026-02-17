@@ -42,4 +42,8 @@ Thumbs.db
 *.log
 
 # MCP State
-mcp-state.json
+# Buildozer
+.buildozer/
+bin/
+*.apk
+*.aab
