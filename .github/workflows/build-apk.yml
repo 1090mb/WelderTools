@@ -39,5 +39,3 @@ jobs:
           name: weldertools-debug.apk
           path: ./bin/*.apk
     
-     - name: Attest Build Provenance
-       uses: actions/attest-build-provenance@v3.2.0
