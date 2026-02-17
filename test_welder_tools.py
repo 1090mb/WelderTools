@@ -10,7 +10,46 @@ import os
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from welder_tools import WeldingExpert
+from welder_tools import WeldingExpert, get_platform_info
+
+
+def test_platform_detection():
+    """Test platform detection functionality"""
+    platform_info = get_platform_info()
+    
+    # Verify platform info has required keys
+    assert 'name' in platform_info
+    assert 'mobile' in platform_info
+    assert 'terminal_width' in platform_info
+    assert 'note' in platform_info
+    
+    # Verify mobile is boolean
+    assert isinstance(platform_info['mobile'], bool)
+    
+    # Verify terminal_width is appropriate (50 for mobile, 60 for desktop)
+    assert platform_info['terminal_width'] in [50, 60]
+    
+    print(f"✓ Platform detection works: {platform_info['note']}")
+
+
+def test_mobile_formatting():
+    """Test that mobile formatting methods work"""
+    expert = WeldingExpert()
+    
+    # Verify platform info is stored
+    assert hasattr(expert, 'platform_info')
+    assert expert.platform_info is not None
+    
+    # Test formatting methods
+    header = expert._format_header("Test Header")
+    assert "Test Header" in header
+    assert "===" in header
+    
+    section = expert._format_section("Test Section")
+    assert "Test Section" in section
+    assert "===" in section
+    
+    print("✓ Mobile formatting methods work correctly")
 
 
 def test_mig_settings():
@@ -146,6 +185,67 @@ def test_material_info():
     print("✓ Stainless steel material info correct")
 
 
+def test_tracking():
+    """Test tracking functionality"""
+    import tempfile
+    import os
+    
+    # Use temporary file for testing
+    fd, temp_path = tempfile.mkstemp(suffix='.json')
+    os.close(fd)  # Close the file descriptor immediately
+    
+    try:
+        expert = WeldingExpert(log_file=temp_path)
+        
+        # Test logging sessions
+        result = expert.log_session(3.5, 10, 'Test session 1')
+        assert '3.5' in result
+        assert '10' in result
+        assert 'Test session 1' in result
+        print("✓ Log session with description works")
+        
+        result = expert.log_session(2.0, 5)
+        assert '2.0' in result
+        assert '5' in result
+        print("✓ Log session without description works")
+        
+        # Test view log
+        result = expert.view_log()
+        assert '3.5' in result
+        assert '2.0' in result
+        assert '10' in result
+        assert '5' in result
+        print("✓ View log works")
+        
+        # Test view with limit
+        result = expert.view_log(limit=1)
+        assert '2.0' in result
+        assert 'Last 1' in result
+        print("✓ View log with limit works")
+        
+        # Test statistics
+        result = expert.get_stats()
+        assert 'Total Sessions: 2' in result
+        assert '5.50' in result  # Total hours
+        assert 'Total Parts Made: 15' in result
+        print("✓ Statistics calculation works")
+        
+        # Test clear log
+        result = expert.clear_log()
+        assert 'CLEARED' in result
+        print("✓ Clear log works")
+        
+        # Verify log is empty after clear
+        result = expert.view_log()
+        assert 'No log entries' in result
+        print("✓ Log is empty after clear")
+        
+    finally:
+        # Clean up temp file
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+
+
 def run_all_tests():
     """Run all tests"""
     print("=" * 60)
@@ -154,6 +254,10 @@ def run_all_tests():
     print()
     
     try:
+        test_platform_detection()
+        print()
+        test_mobile_formatting()
+        print()
         test_mig_settings()
         print()
         test_tig_settings()
@@ -165,6 +269,8 @@ def run_all_tests():
         test_machine_info()
         print()
         test_material_info()
+        print()
+        test_tracking()
         print()
         print("=" * 60)
         print("✓ ALL TESTS PASSED")

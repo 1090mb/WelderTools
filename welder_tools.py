@@ -2,18 +2,77 @@
 """
 WelderTools - Professional Welding Assistant
 Expert guidance on MIG, TIG, Arc welding with comprehensive knowledge base
+Cross-platform support: Desktop, Android (Termux), iOS (Pythonista/iSH)
 """
+
+import sys
+import platform
+import os
+import json
+from datetime import datetime
+
+
+def get_platform_info():
+    """Detect current platform and return platform-specific information"""
+    system = platform.system()
+    
+    # Detect Android (Termux)
+    if 'ANDROID_ROOT' in os.environ or 'ANDROID_DATA' in os.environ:
+        return {
+            'name': 'Android',
+            'mobile': True,
+            'terminal_width': 50,  # Mobile screen width
+            'note': 'Running on Android (Termux)'
+        }
+    
+    # Detect iOS (check for common iOS Python environments: Pythonista, iSH, a-Shell)
+    is_ios = (system == 'Darwin' and 
+              ('Pythonista' in sys.executable or 
+               'iSH' in os.environ.get('SHELL', '') or
+               'a-Shell' in sys.executable or
+               'LC_TERMINAL' in os.environ and os.environ.get('LC_TERMINAL') == 'a-Shell'))
+    
+    if is_ios:
+        return {
+            'name': 'iOS',
+            'mobile': True,
+            'terminal_width': 50,  # Mobile screen width
+            'note': 'Running on iOS'
+        }
+    
+    # Desktop platforms
+    return {
+        'name': system,
+        'mobile': False,
+        'terminal_width': 60,  # Desktop screen width
+        'note': f'Running on {system}'
+    }
+
 
 class WeldingExpert:
     """Expert system for all welding processes and equipment"""
     
-    def __init__(self):
+    def __init__(self, log_file='welding_log.json'):
         self.mig_settings = self._init_mig_settings()
         self.tig_settings = self._init_tig_settings()
         self.arc_settings = self._init_arc_settings()
         self.wire_speeds = self._init_wire_speeds()
         self.machine_brands = self._init_machine_brands()
         self.materials = self._init_materials()
+        self.platform_info = get_platform_info()
+        self.log_file = log_file
+    
+    def _format_header(self, text):
+        """Format header based on platform (mobile-friendly for smaller screens)"""
+        if self.platform_info['mobile']:
+            # Shorter separator for mobile
+            return f"\n{'=' * 50}\n{text}\n{'=' * 50}\n"
+        else:
+            return f"\n{'=' * 60}\n{text}\n{'=' * 60}\n"
+    
+    def _format_section(self, title):
+        """Format section title based on platform"""
+        return f"\n=== {title} ===\n"
     
     def _init_mig_settings(self):
         """Initialize MIG welding parameters"""
@@ -214,7 +273,7 @@ class WeldingExpert:
             return f"Thickness '{thickness}' not found for {material}. Available: {available}"
         
         settings = mat_data['thickness_range'][thickness]
-        output = f"\n=== MIG WELDING - {material.upper().replace('_', ' ')} - {thickness}\" ===\n"
+        output = self._format_section(f"MIG WELDING - {material.upper().replace('_', ' ')} - {thickness}\"")
         output += f"Voltage: {settings['voltage']}\n"
         output += f"Wire Speed: {settings['wire_speed']}\n"
         output += f"Gas: {settings['gas']}\n"
@@ -241,7 +300,7 @@ class WeldingExpert:
             return f"Thickness '{thickness}' not found for {material}. Available: {available}"
         
         settings = mat_data['thickness_range'][thickness]
-        output = f"\n=== TIG WELDING - {material.upper().replace('_', ' ')} - {thickness}\" ===\n"
+        output = self._format_section(f"TIG WELDING - {material.upper().replace('_', ' ')} - {thickness}\"")
         output += f"Amperage: {settings['amperage']}\n"
         output += f"Tungsten: {settings['tungsten']}\n"
         output += f"Gas: {settings['gas']}\n"
@@ -267,7 +326,7 @@ class WeldingExpert:
         
         # Cast iron is special case
         if material == 'cast_iron':
-            output = f"\n=== ARC/STICK WELDING - CAST IRON ===\n"
+            output = self._format_section("ARC/STICK WELDING - CAST IRON")
             output += f"Electrode: {mat_data['electrode']}\n"
             output += f"Preheat: {mat_data['preheat']}\n"
             output += f"Technique: {mat_data['technique']}\n"
@@ -279,7 +338,7 @@ class WeldingExpert:
             return f"Thickness '{thickness}' not found for {material}. Available: {available}"
         
         settings = mat_data['thickness_range'][thickness]
-        output = f"\n=== ARC/STICK WELDING - {material.upper().replace('_', ' ')} - {thickness}\" ===\n"
+        output = self._format_section(f"ARC/STICK WELDING - {material.upper().replace('_', ' ')} - {thickness}\"")
         output += f"Electrode: {settings['electrode']}\n"
         output += f"Amperage: {settings['amperage']}\n"
         output += f"Polarity: {settings['polarity']}\n"
@@ -296,7 +355,7 @@ class WeldingExpert:
     def get_machine_info(self, brand=None):
         """Get information about welding machine brands"""
         if brand is None:
-            output = "\n=== WELDING MACHINE BRANDS ===\n\n"
+            output = self._format_section("WELDING MACHINE BRANDS")
             for brand_name, info in self.machine_brands.items():
                 output += f"{brand_name}:\n"
                 output += f"  Specialty: {info['specialty']}\n"
@@ -309,7 +368,7 @@ class WeldingExpert:
             return f"Brand '{brand}' not found. Available: {', '.join(self.machine_brands.keys())}"
         
         info = self.machine_brands[brand]
-        output = f"\n=== {brand.upper()} WELDING MACHINES ===\n"
+        output = self._format_section(f"{brand.upper()} WELDING MACHINES")
         output += f"Specialty: {info['specialty']}\n"
         output += f"Reputation: {info['reputation']}\n"
         output += f"Popular Models:\n"
@@ -325,7 +384,7 @@ class WeldingExpert:
             return f"Material '{material}' not found. Available: {', '.join(self.materials.keys())}"
         
         info = self.materials[material]
-        output = f"\n=== {material.upper().replace('_', ' ')} ===\n"
+        output = self._format_section(material.upper().replace('_', ' '))
         output += f"Composition: {info['composition']}\n"
         output += f"Weldability: {info['weldability']}\n"
         
@@ -365,7 +424,7 @@ class WeldingExpert:
             return f"Thickness category '{thickness_category}' not found. Available: {available}"
         
         speed = wire_data[thickness_category]
-        output = f"\n=== WIRE SPEED - {material.upper().replace('_', ' ')} ===\n"
+        output = self._format_section(f"WIRE SPEED - {material.upper().replace('_', ' ')}")
         output += f"Wire Size: {wire_size}\"\n"
         output += f"Thickness: {thickness_category}\n"
         output += f"Wire Speed: {speed}\n"
