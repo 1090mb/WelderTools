@@ -219,9 +219,9 @@ def test_tracking():
         
         # Test view with limit
         result = expert.view_log(limit=1)
-        assert '2.0' in result
-        assert 'Last 1' in result
-        print("✓ View log with limit works")
+        assert '2.0' in result, f"Expected '2.0' (latest session) in result, got:\n{result}"
+        assert 'Last 1' in result, "Expected 'Last 1' in header"
+        print("✓ View log with limit works (Sort order verified)")
         
         # Test statistics
         result = expert.get_stats()

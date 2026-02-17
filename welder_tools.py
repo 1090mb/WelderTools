@@ -480,6 +480,8 @@ class WeldingExpert:
             output = self._format_section(f"WELDING LOG (Last {limit})")
             
             # Sort by date descending
+            # Reverse list first so that stable sort keeps later entries (newer) first when dates are equal
+            data.reverse()
             data.sort(key=lambda x: x.get('date', ''), reverse=True)
             
             for entry in data[:limit]:
