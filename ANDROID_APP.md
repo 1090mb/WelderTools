@@ -14,11 +14,10 @@ The Android app includes all the functionality of the command-line version:
 - **Wire Speed Calculator** - Calculate detailed wire speeds by material and wire size
 - **Machine Information** - Browse information on major welding machine brands
 - **Material Properties** - View composition and weldability data for different metals
-- **Hours & Parts Tracking** - Log welding sessions, track hours and parts made
 
 ## Installation
 
-### Pre-built APK (Coming Soon)
+### Pre-built APK
 
 Download the latest APK from the releases page and install it on your Android device.
 
@@ -38,7 +37,7 @@ To build the Android app yourself, you'll need:
    sudo apt update
    
    # Install build tools
-   sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+   sudo apt install -y git zip unzip openjdk-11-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
    
    # Install Cython
    pip3 install --upgrade cython
@@ -58,16 +57,13 @@ To build the Android app yourself, you'll need:
 4. **Build APK**
    ```bash
    # First build will take 30-60 minutes as it downloads Android SDK/NDK
-   buildozer android debug
-   
-   # For release builds
    buildozer android release
    ```
 
 5. **Install APK**
    ```bash
    # The APK will be in the bin/ directory
-   adb install bin/WelderTools-1.0.0-debug.apk
+   adb install bin/WelderTools-0.1-release.apk
    
    # Or transfer to your phone and install manually
    ```
@@ -93,32 +89,6 @@ If the build fails:
 - Make sure your device is running Android 5.0 (API 21) or higher
 - Check logcat for errors: `adb logcat | grep python`
 
-### Missing Features
-
-If a feature isn't working:
-- Check that storage permissions are granted
-- Check app logs in Android settings
-
-## Using the App
-
-1. **Launch WelderTools** from your app drawer
-2. **Select a feature** from the main menu
-3. **Enter parameters** (material, thickness, etc.)
-4. **Tap "Get Settings"** or "Calculate" to see results
-5. **Use tracking** to log your welding hours and parts
-
-## Advantages over CLI Version
-
-- **Touch-friendly interface** - No typing required
-- **Easier to use** - Point and tap instead of remembering commands
-- **Better for the shop** - Quick access from your phone
-- **Visual feedback** - Larger text, better formatting
-- **No terminal required** - Works like any other Android app
-
-## Still want CLI?
-
-You can still use the command-line version via Termux! See [MOBILE_SETUP.md](MOBILE_SETUP.md) for instructions.
-
 ## Development
 
 The Android app is built with:
@@ -128,7 +98,8 @@ The Android app is built with:
 
 Source code:
 - `main.py` - GUI application code
-- `welder_tools.py` - Core welding expert system (shared with CLI)
+- `welder_tools.py` - Core welding expert system
+- `weldertools.kv` - Kivy language file for the UI
 - `buildozer.spec` - Android build configuration
 
 ## License

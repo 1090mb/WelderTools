@@ -4,19 +4,13 @@
 
 The best welder assistant in the world. Knows everything about welding: MIG, TIG, Arc. All the machines, tools, brands, parts, and components. All the settings, temperatures, and wire speeds. Provides straightforward, no-nonsense output.
 
-**✨ Now available as a native Android app!** Full GUI interface for your phone or tablet. See [ANDROID_APP.md](ANDROID_APP.md) for build instructions.
-
-**✨ Also supports mobile CLI!** Use WelderTools via command-line on Android (Termux) and iOS. See [MOBILE_SETUP.md](MOBILE_SETUP.md) for details.
+**✨ Now available as a native Android app!** Full GUI interface for your phone or tablet.
 
 ## Platforms Supported
 
-- ✅ **Linux** - Full support (CLI)
-- ✅ **macOS** - Full support (CLI)
-- ✅ **Windows** - Full support (CLI)
-- ✅ **Android** - Native GUI app + CLI via Termux
-- ✅ **iOS** - CLI via Pythonista, iSH, or a-Shell
+- ✅ **Android** - Native GUI app
 
-**Cross-Platform**: Pure Python with no external dependencies for CLI. Android GUI app uses Kivy framework.
+**Cross-Platform**: Android GUI app uses Kivy framework.
 
 ## Features
 
@@ -26,7 +20,6 @@ The best welder assistant in the world. Knows everything about welding: MIG, TIG
 - **Wire Speed Calculator**: Detailed wire speed recommendations by material and wire size
 - **Machine Knowledge**: Information on major brands (Miller, Lincoln, ESAB, Hobart, Everlast, Fronius)
 - **Material Properties**: Composition, weldability, and special considerations for different metals
-- **Hours & Parts Tracking**: Log welding sessions, track hours worked and parts made, view statistics
 
 ## Running the Application
 
@@ -64,9 +57,13 @@ This project is set up to be built into an Android APK using [Buildozer](https:/
 
 2.  **Build the APK:**
     ```bash
-    buildozer android debug
+    buildozer android release
     ```
     The APK will be created in the `bin/` directory.
+
+## Releasing the App
+
+To release the app, you need to create a new release on GitHub. This will trigger the `build-and-release` workflow, which will build the app and upload the APK to the release.
 
 ## Usage
 
@@ -75,57 +72,6 @@ The application provides a user-friendly interface to access all the features of
 - Choose the material and thickness.
 - Get instant settings and recommendations.
 - Browse information about welding machines and materials.
-
-
-**Output includes:**
-- Composition
-- Weldability rating
-- Preheat requirements
-- Special concerns
-- Preparation steps
-- Common uses
-
-### Hours & Parts Tracking
-
-Track your welding work with built-in session logging:
-
-```bash
-# Log a welding session
-python welder_tools.py log <hours> <parts> [description]
-
-# View recent log entries
-python welder_tools.py view [limit]
-
-# View statistics
-python welder_tools.py stats
-
-# Clear all log entries
-python welder_tools.py clear
-```
-
-**Examples:**
-```bash
-# Log 4.5 hours with 12 parts made and a description
-python welder_tools.py log 4.5 12 "Welded steel brackets for truck bed"
-
-# Log session without description
-python welder_tools.py log 2.5 7
-
-# View last 20 entries
-python welder_tools.py view 20
-
-# View all statistics
-python welder_tools.py stats
-```
-
-**Tracking data includes:**
-- Date and time of each session
-- Hours worked
-- Number of parts made
-- Optional description
-- Cumulative statistics (total hours, total parts, averages)
-
-All tracking data is stored locally in `welding_log.json` and persists between sessions.
 
 ## Supported Materials
 
@@ -189,6 +135,7 @@ All tracking data is stored locally in `welding_log.json` and persists between s
 - **Stick electrode**: Arc too long, reduce amperage
 - **Undercut**: Too much amperage, too fast travel
 - **Overlap**: Too slow travel, too low amperage
+-
 - **Slag inclusion**: Clean between passes, proper technique
 
 ## License
@@ -202,15 +149,3 @@ Contributions welcome! This tool is designed to help welders with accurate, prof
 ## Disclaimer
 
 Always follow manufacturer's recommendations and safety guidelines. This tool provides general guidance based on industry standards. Actual settings may vary based on specific conditions, equipment, and application requirements.
-
----
-
-## Mobile Users
-
-📱 **Using on Android or iOS?** Check out [MOBILE_SETUP.md](MOBILE_SETUP.md) for platform-specific setup guides, tips, and troubleshooting.
-
-**Mobile Features:**
-- ✅ Offline operation - no internet required
-- ✅ Optimized output for smaller screens
-- ✅ All features work identically to desktop
-- ✅ Quick access in the shop on your phone or tablet

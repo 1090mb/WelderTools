@@ -1,0 +1,108 @@
+#:kivy 1.11.1
+
+<WelderToolsLayout>:
+    orientation: 'vertical'
+    padding: 20
+    spacing: 20
+
+    Label:
+        text: 'WelderTools'
+        font_size: '40sp'
+        bold: True
+        size_hint_y: None
+        height: 50
+
+    ScrollView:
+        size_hint: (1, 1)
+        Label:
+            id: result_label
+            text: 'Welcome to WelderTools!'
+            size_hint_y: None
+            height: self.texture_size[1]
+            text_size: self.width, None
+            markup: True
+            padding: 10, 10
+            halign: 'left'
+            valign: 'top'
+
+    GridLayout:
+        cols: 2
+        size_hint_y: None
+        height: 250
+        spacing: 20
+
+        Spinner:
+            id: material_spinner
+            text: 'Select Material'
+            values: app.get_materials()
+            on_text: app.update_thickness_spinner(self.text); app.update_wire_spinners(self.text)
+            background_color: (0.2, 0.6, 0.8, 1)
+            background_normal: ''
+
+        Spinner:
+            id: thickness_spinner
+            text: 'Select Thickness'
+            background_color: (0.2, 0.6, 0.8, 1)
+            background_normal: ''
+
+        Spinner:
+            id: wire_size_spinner
+            text: 'Select Wire Size'
+            background_color: (0.2, 0.6, 0.8, 1)
+            background_normal: ''
+
+        Spinner:
+            id: thickness_cat_spinner
+            text: 'Select Thickness Category'
+            background_color: (0.2, 0.6, 0.8, 1)
+            background_normal: ''
+
+        Spinner:
+            id: brand_spinner
+            text: 'Select Brand'
+            values: app.get_brands()
+            background_color: (0.2, 0.6, 0.8, 1)
+            background_normal: ''
+
+    GridLayout:
+        cols: 3
+        size_hint_y: None
+        height: 80
+        spacing: 20
+
+        Button:
+            text: 'MIG'
+            on_press: app.get_mig_settings()
+            background_color: (0.2, 0.8, 0.4, 1)
+            background_normal: ''
+            bold: True
+        Button:
+            text: 'TIG'
+            on_press: app.get_tig_settings()
+            background_color: (0.2, 0.8, 0.4, 1)
+            background_normal: ''
+            bold: True
+        Button:
+            text: 'Arc'
+            on_press: app.get_arc_settings()
+            background_color: (0.2, 0.8, 0.4, 1)
+            background_normal: ''
+            bold: True
+        Button:
+            text: 'Wire Speed'
+            on_press: app.get_wire_speed()
+            background_color: (0.9, 0.5, 0.1, 1)
+            background_normal: ''
+            bold: True
+        Button:
+            text: 'Machines'
+            on_press: app.get_machine_info()
+            background_color: (0.9, 0.5, 0.1, 1)
+            background_normal: ''
+            bold: True
+        Button:
+            text: 'Materials'
+            on_press: app.get_material_info()
+            background_color: (0.9, 0.5, 0.1, 1)
+            background_normal: ''
+            bold: True
