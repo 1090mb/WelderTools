@@ -1,0 +1,61 @@
+name: Build and Release APK
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev 
+          libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev 
+          libgstreamer1.0-0 libgstreamer1.0-dev libmtdev-dev
+          pip install --upgrade pip
+          pip install buildozer cython
+
+      - name: Build APK
+        run: |
+          sudo apt-get install -y openjdk-8-jdk
+          buildozer android debug
+
+      - name: Get version
+        id: version
+        run: echo "VERSION=$(grep -E '^version = ' buildozer.spec | sed -E 's/version = //')" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.VERSION }}.${{ github.run_number }}
+          release_name: Release v${{ env.VERSION }}.${{ github.run_number }}
+          draft: false
+          prerelease: false
+
+      - name: Get APK file path
+        id: get_apk_path
+        run: echo "APK_PATH=$(find bin -name '*.apk' | head -n 1)" >> $GITHUB_ENV
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.APK_PATH }}
+          asset_name: weldertools.apk
+          asset_content_type: application/vnd.android.package-archive
