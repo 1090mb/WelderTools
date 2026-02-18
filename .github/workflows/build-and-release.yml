@@ -57,7 +57,7 @@ jobs:
         run: |
           buildozer -v android debug
         env:
-          # Auto-accept SDK licenses
+          # Suppress root warnings in CI environment (0 = suppress warnings)
           BUILDOZER_WARN_ON_ROOT: 0
 
       - name: Upload APK to Release
