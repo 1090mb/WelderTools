@@ -53,16 +53,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Accept Android SDK licenses
-        run: |
-          yes | sdkmanager --licenses || true
-
       - name: Build APK
         run: |
-          buildozer android debug
+          buildozer -v android debug
+        env:
+          # Auto-accept SDK licenses
+          BUILDOZER_WARN_ON_ROOT: 0
 
       - name: Upload APK to Release
         uses: softprops/action-gh-release@v1
