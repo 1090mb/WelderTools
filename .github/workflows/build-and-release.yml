@@ -65,7 +65,7 @@ jobs:
         run: |
           sudo apt-get install -y openjdk-17-jdk
           export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-          yes | buildozer android debug
+          buildozer android debug
         env:
           ANDROID_SDK_ROOT: ${{ github.workspace }}/.buildozer/android/platform/android-sdk
 

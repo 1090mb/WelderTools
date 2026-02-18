@@ -93,8 +93,14 @@ The APK will be created in the `bin/` directory.
 ### Troubleshooting Android Build
 
 **SDK License Issues**:
+
+The Android SDK requires accepting license agreements. This is handled automatically in CI/CD via the `android.accept_sdk_license = True` setting in `buildozer.spec`.
+
+For local builds, create the license file:
 ```bash
 mkdir -p "$HOME/.android"
+# This hash represents the Android SDK license agreement
+# It may need updating when SDK licenses change
 echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" > "$HOME/.android/repositories.cfg"
 ```
 
