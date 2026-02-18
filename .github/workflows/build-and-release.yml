@@ -17,6 +17,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
+          cache: 'pip'
+
+      - name: Cache Buildozer directory
+        uses: actions/cache@v4
+        with:
+          path: .buildozer
+          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
+          restore-keys: |
+            ${{ runner.os }}-buildozer-
 
       - name: Install system dependencies
         run: |
@@ -45,20 +54,35 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
-          pip install buildozer cython python-for-android
+          pip install buildozer cython==0.29.36 python-for-android
+
+      - name: Accept Android SDK Licenses
+        run: |
+          mkdir -p "$HOME/.android"
+          echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" > "$HOME/.android/repositories.cfg"
 
       - name: Build APK
         run: |
-          sudo apt-get install -y openjdk-11-jdk
-          export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+          sudo apt-get install -y openjdk-17-jdk
+          export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
           buildozer android debug
+        env:
+          ANDROID_SDK_ROOT: ${{ github.workspace }}/.buildozer/android/platform/android-sdk
 
       - name: Upload APK to Release
+        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: bin/*.apk
+
+      - name: Upload APK as Artifact (workflow_dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: weldertools-android-apk
+          path: bin/*.apk
 
   build-ios:
     name: Build iOS Project
@@ -71,10 +95,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+          cache: 'pip'
 
       - name: Install dependencies
         run: |
           pip install --upgrade pip
+          pip install cython==0.29.36
           pip install kivy-ios
           brew install autoconf automake libtool pkg-config
 
@@ -91,8 +117,16 @@ jobs:
           zip -r weldertools-ios-project.zip *-ios
 
       - name: Upload iOS Project to Release
+        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: weldertools-ios-project.zip
+
+      - name: Upload iOS Project as Artifact (workflow_dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: weldertools-ios-project
+          path: weldertools-ios-project.zip

@@ -36,16 +36,19 @@ To build the Android app yourself, you'll need:
    # Update system
    sudo apt update
    
-   # Install build tools
-   sudo apt install -y git zip unzip openjdk-11-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+   # Install build tools and JDK 17
+   sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
    
-   # Install Cython
-   pip3 install --upgrade cython
+   # Install SDL2 libraries
+   sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+   
+   # Install Cython (specific version for compatibility)
+   pip3 install --upgrade cython==0.29.36
    ```
 
 2. **Install Buildozer**
    ```bash
-   pip3 install --upgrade buildozer
+   pip3 install --upgrade buildozer python-for-android
    ```
 
 3. **Clone Repository**
@@ -56,17 +59,22 @@ To build the Android app yourself, you'll need:
 
 4. **Build APK**
    ```bash
+   # Set Java home for JDK 17
+   export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+   
    # First build will take 30-60 minutes as it downloads Android SDK/NDK
-   buildozer android release
+   buildozer android debug
    ```
 
 5. **Install APK**
    ```bash
    # The APK will be in the bin/ directory
-   adb install bin/WelderTools-0.1-release.apk
+   adb install bin/weldertools-*-armeabi-v7a-debug.apk
    
    # Or transfer to your phone and install manually
    ```
+
+For detailed build instructions and troubleshooting, see [BUILD_GUIDE.md](BUILD_GUIDE.md).
 
 ## Building Tips
 
