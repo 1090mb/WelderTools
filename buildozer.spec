@@ -32,10 +32,21 @@ fullscreen = 0
 android.permissions = INTERNET
 
 # (int) Target Android API, should be as high as possible.
-android.api = 31
+android.api = 33
 
 # (int) Minimum API your APK will support.
 android.minapi = 21
+
+# (str) Android SDK build-tools version to use
+android.build_tools_version = 33.0.2
+
+# (str) Android NDK version to use
+android.ndk = 25b
+
+# (bool) Auto-accept SDK licenses
+# Note: This accepts Google's Android SDK licenses which are required for automated builds.
+# Review licenses at: https://developer.android.com/studio/terms
+android.accept_sdk_license = True
 
 [app:ios]
 
