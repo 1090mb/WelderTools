@@ -44,6 +44,8 @@ android.build_tools_version = 33.0.2
 android.ndk = 25b
 
 # (bool) Auto-accept SDK licenses
+# Note: This accepts Google's Android SDK licenses which are required for automated builds.
+# Review licenses at: https://developer.android.com/studio/terms
 android.accept_sdk_license = True
 
 [app:ios]
