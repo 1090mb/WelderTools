@@ -54,22 +54,35 @@ python main.py
 
 This project is set up to be built into an Android APK using [Buildozer](https://buildozer.readthedocs.io/en/latest/).
 
+**Quick build:**
 1.  **Install Buildozer:**
     ```bash
-    pip install buildozer
+    pip install buildozer cython==0.29.36 python-for-android
     ```
 
 2.  **Build the APK:**
     ```bash
+    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
     buildozer android debug
     ```
     The APK will be created in the `bin/` directory.
 
+**For detailed build instructions, CI/CD setup, and troubleshooting, see [BUILD_GUIDE.md](BUILD_GUIDE.md).**
+
+### Automated Builds via GitHub Actions
+
+When you create a new GitHub release, the workflow automatically:
+- Builds Android APK
+- Builds iOS Xcode project
+- Attaches both to the release
+
+You can also trigger manual builds from the Actions tab.
+
 ### iOS (Manual)
 
 1.  Download the `weldertools-ios-project.zip` from the GitHub Release.
-2.  Unzip and open `weldertools.xcodeproj` in Xcode on a Mac.
-3.  Follow the iOS Manual Signing Guide to sign and install the app.
+2.  Unzip and open `WelderTools.xcodeproj` in Xcode on a Mac.
+3.  Follow the [IOS_SIGNING_GUIDE.md](IOS_SIGNING_GUIDE.md) to sign and install the app.
 
 ## Testing
 
@@ -82,7 +95,18 @@ python test_android_app.py
 
 ## Releasing the App
 
-To release the app, you need to create a new release on GitHub. This will trigger the `build-and-release` workflow, which will build the app and upload the APK to the release.
+To create a new release with automated builds:
+
+1. **Create a new GitHub release** with a version tag (e.g., `v0.2`)
+2. The `build-and-release` workflow automatically:
+   - Builds Android APK
+   - Builds iOS Xcode project
+   - Uploads both to the release
+3. Download the artifacts from the release page
+
+You can also manually trigger builds from the Actions tab without creating a release.
+
+For detailed CI/CD documentation, see [BUILD_GUIDE.md](BUILD_GUIDE.md).
 
 ## Usage
 
