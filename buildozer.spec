@@ -37,24 +37,15 @@ android.api = 33
 # (int) Minimum API your APK will support.
 android.minapi = 21
 
+# (str) Android SDK build-tools version to use
+android.build_tools_version = 33.0.2
+
 # (str) Android NDK version to use
 android.ndk = 25b
 
-# (str) Android SDK directory (if empty, it will be automatically downloaded.)
-# android.sdk_path =
-
-# (str) Android NDK directory (if empty, it will be automatically downloaded.)
-# android.ndk_path =
-
-# (bool) If True, then skip trying to update the Android sdk
-# This can be useful to avoid excess Internet downloads or save time
-# when an update is due and you just want to test/build your package
-# android.skip_update = False
-
-# (bool) If True, then automatically accept SDK license
-# agreements. This is intended for automation only. If set to False,
-# the default, you will be shown the license when first running
-# buildozer.
+# (bool) Auto-accept SDK licenses
+# Note: This accepts Google's Android SDK licenses which are required for automated builds.
+# Review licenses at: https://developer.android.com/studio/terms
 android.accept_sdk_license = True
 
 [app:ios]
